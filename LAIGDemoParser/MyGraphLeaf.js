@@ -4,12 +4,15 @@
 **/
 
 function MyGraphLeaf(graph, xmlelem, args) {
+	
 	this.graph = graph;
+	this.primitive = null;
 
 	switch(xmlelem)
 	{
 		case "rectangle":
 		this.primitive = new MyQuad(this.graph.scene, args);
+		console.log
 		break;
 
 		case "cylinder":
@@ -26,3 +29,10 @@ function MyGraphLeaf(graph, xmlelem, args) {
 	}
 }
 
+MyGraphLeaf.prototype.display = function(){
+
+	if(this.primitive != null)
+		this.primitive.display();
+
+	this.graph.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+xmlelem);
+}
