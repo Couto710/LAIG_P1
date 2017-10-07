@@ -1444,10 +1444,12 @@ MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
 	// remove log below to avoid performance issues
 	this.log("Graph should be rendered here...");
-    var size = this.leaves.length;
-
-    for(var i = 0; i<size; i++){
-        this.leaves[i].display();
+	var size = this.leaves.length;
+	
+	//this.scene.multMatrix(nodes[0].transformMatrix);
+	 for(var i = 0; i<size; i++){
+    	this.scene.pushMatrix();
+    	this.leaves[i].display(); 
+    	this.scene.popMatrix();
     }
-
 }
