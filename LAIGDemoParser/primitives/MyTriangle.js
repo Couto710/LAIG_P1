@@ -6,7 +6,7 @@
 function MyTriangle(scene, args) {
     CGFobject.call(this, scene);
 
-    this.args = args;
+    this.args = args.split(" ").map(Number);
 
     this.initBuffers();
 };

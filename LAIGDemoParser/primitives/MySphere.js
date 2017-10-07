@@ -8,7 +8,7 @@ var deg2rad = Math.PI / 180;
 function MySphere(scene, args) {
     CGFobject.call(this, scene);
 
-    this.args = args || [1.0, 8, 8];
+    this.args = args.split(" ").map(Number);
 
     this.radius = this.args[0];
     this.slices = this.args[1];

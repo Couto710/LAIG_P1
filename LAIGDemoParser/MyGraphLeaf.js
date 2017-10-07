@@ -3,10 +3,13 @@
  * @constructor
 **/
 
-function MyGraphLeaf(graph, xmlelem, args) {
+function MyGraphLeaf(graph, xmlelem, args, id) {
 	
 	this.graph = graph;
 	this.primitive = null;
+
+	if(id != "noid")
+		this.id= id;
 
 	switch(xmlelem)
 	{
@@ -33,6 +36,4 @@ MyGraphLeaf.prototype.display = function(){
 
 	if(this.primitive != null)
 		this.primitive.display();
-
-	this.graph.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+xmlelem);
 }
