@@ -7,6 +7,7 @@ function MyGraphLeaf(graph, xmlelem, args, id) {
 	
 	this.graph = graph;
 	this.primitive = null;
+	this.type = xmlelem;
 
 	if(id != "noid")
 		this.id= id;

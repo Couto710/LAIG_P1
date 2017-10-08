@@ -1348,7 +1348,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 						else
 							this.warn("Error in leaf");
 
-                        var id = this.reader.getString(descendants[j], "id", true);
+                        var id = this.reader.getString(descendants[j], "id");
 
                         if(id == null){
                             id = "noid";
@@ -1357,7 +1357,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         else
                             this.log("    Leaf id: " + id)
 
-                        var args = this.reader.getString(descendants[j], 'args', true);
+                        var args = this.reader.getString(descendants[j], 'args');
 
                         if(args != null)
                             this.log("    Leaf args: " + args);
@@ -1443,13 +1443,32 @@ MySceneGraph.generateRandomString = function(length) {
 MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
 	// remove log below to avoid performance issues
-	this.log("Graph should be rendered here...");
-	var size = this.leaves.length;
 	
-	//this.scene.multMatrix(nodes[0].transformMatrix);
+	/*this.scene.multMatrix(nodes[0].transformMatrix);
 	 for(var i = 0; i<size; i++){
     	this.scene.pushMatrix();
     	this.leaves[i].display(); 
     	this.scene.popMatrix();
+    }*/
+
+    var rootn = this.nodes[this.idRoot];
+
+    this.drawEverything(rootn);
+}
+
+MySceneGraph.prototype.drawEverything = function(node){
+
+    this.scene.pushMatrix();
+    this.scene.multMatrix(node.transformMatrix);
+
+    for(var i = 0; i < node.children.length; i++){
+        this.drawEverything(this.nodes[node.children[i]]);
     }
+
+    for(var j = 0; j < node.leaves.length; j++){
+        node.leaves[j].display();
+        //console.log("drawn  " + node.leaves[j].type)
+    }
+
+    this.scene.popMatrix();
 }
