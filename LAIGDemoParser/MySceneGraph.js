@@ -1442,32 +1442,28 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
-	// remove log below to avoid performance issues
-	
-	/*this.scene.multMatrix(nodes[0].transformMatrix);
-	 for(var i = 0; i<size; i++){
-    	this.scene.pushMatrix();
-    	this.leaves[i].display(); 
-    	this.scene.popMatrix();
-    }*/
 
     var rootn = this.nodes[this.idRoot];
 
-    this.drawEverything(rootn);
+    this.drawEverything(rootn, this.defaultMaterialID);
 }
 
-MySceneGraph.prototype.drawEverything = function(node){
+MySceneGraph.prototype.drawEverything = function(node, mat){
+
+    var material = mat;
+    if(node.materialID != "null")
+        material = this.materials[node.materialID];
 
     this.scene.pushMatrix();
     this.scene.multMatrix(node.transformMatrix);
 
     for(var i = 0; i < node.children.length; i++){
-        this.drawEverything(this.nodes[node.children[i]]);
+        this.drawEverything(this.nodes[node.children[i]], material);
     }
 
     for(var j = 0; j < node.leaves.length; j++){
+        material.apply();
         node.leaves[j].display();
-        //console.log("drawn  " + node.leaves[j].type)
     }
 
     this.scene.popMatrix();
