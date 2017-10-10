@@ -70,15 +70,6 @@
 
 
     <MATERIALS>
-        <!-- Pyramid material -->
-        <MATERIAL id="piramideMaterial">                                  
-            <shininess value="1" />
-            <specular r="0" g="0" b="0" a="1" />        
-            <diffuse r="1.0" g="0.68" b="0.4" a="1" />        
-            <ambient r="0.2" g="0.2" b="0.2" a="1" />         
-            <emission r="0.0" g="0.0" b="0.0" a="1" />        
-        </MATERIAL>
-
         <!-- Tree leaves material -->
         <MATERIAL id="leavesTreeMaterial">                                  
             <shininess value="1" />
@@ -88,8 +79,8 @@
             <emission r="0.0" g="0.0" b="0.0" a="1" />        
         </MATERIAL>
 
-        <!-- Tree trunk material -->
-        <MATERIAL id="trunkTreeMaterial">                                  
+        <!-- Wood material -->
+        <MATERIAL id="woodMaterial">                                  
             <shininess value="1" />
             <specular r="0.0" g="0.0" b="0.0" a="1" />        
             <diffuse r="0.6" g="0.298" b="0.0" a="1" />      
@@ -97,8 +88,8 @@
             <emission r="0.0" g="0.0" b="0.0" a="1" />       
         </MATERIAL>
 
-        <!-- Lamp post material -->
-        <MATERIAL id="lightPostMaterial">                                  
+        <!-- Post material -->
+        <MATERIAL id="postMaterial">                                  
             <shininess value="100" />
             <specular r="0.0" g="0.0" b="0.0" a="1" />        
             <diffuse r="0.447" g="0.416" b="0.416" a="1" />       
@@ -106,12 +97,12 @@
             <emission r="0.0" g="0.0" b="0.0" a="1" />        
         </MATERIAL>
 
-        <!-- Light bulb material -->
-        <MATERIAL id="lightMaterial">                                  
-            <shininess value="100" />
-            <specular r="0.5" g="0.5" b="0.5" a="1" />       
-            <diffuse r="0.5" g="0.5" b="0.5" a="1" />       
-            <ambient r="0.0" g="0.0" b="0.0" a="1" />        
+        <!-- Ball material -->
+        <MATERIAL id="ballMaterial">                                  
+            <shininess value="10" />
+            <specular r="0.7" g="0.4" b="0.4" a="1" />        
+            <diffuse r="0.5" g="0.4" b="0.4" a="1" />       
+            <ambient r="0.5" g="0.0" b="0.0" a="1" />         
             <emission r="0.0" g="0.0" b="0.0" a="1" />        
         </MATERIAL>
 
@@ -152,8 +143,8 @@
         </NODE>
 
         <NODE id="chao">      
-            <MATERIAL id="trunkTreeMaterial" />     
-            <TEXTURE id ="null" />                 
+            <MATERIAL id="woodMaterial" />     
+            <TEXTURE id ="rocks" />                 
 
             <SCALE sx="32" sy="1" sz="19" />
             <TRANSLATION x="0" y="0" z="1" />
@@ -165,7 +156,7 @@
         </NODE>
 
         <NODE id="cestos">      
-            <MATERIAL id="lightPostMaterial" />     
+            <MATERIAL id="postMaterial" />     
             <TEXTURE id ="null" />                 
 
             <DESCENDANTS>
@@ -469,7 +460,7 @@
         </NODE>
 
         <NODE id="bancadas">      
-            <MATERIAL id="trunkTreeMaterial" />     
+            <MATERIAL id="woodMaterial" />     
             <TEXTURE id ="null" />
 
             <DESCENDANTS>
@@ -734,7 +725,7 @@
         </NODE>
 
         <NODE id="bola">       
-            <MATERIAL id="null" />     
+            <MATERIAL id="ballMaterial" />     
             <TEXTURE id="null" />                   
 
             <TRANSLATION x="16" y="0.8" z="9" />

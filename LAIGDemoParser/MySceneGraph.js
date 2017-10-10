@@ -1445,24 +1445,34 @@ MySceneGraph.prototype.displayScene = function() {
 
     var rootn = this.nodes[this.idRoot];
 
-    this.drawEverything(rootn, this.defaultMaterialID);
+    this.drawEverything(rootn, this.defaultMaterialID, null);
 }
 
-MySceneGraph.prototype.drawEverything = function(node, mat){
+MySceneGraph.prototype.drawEverything = function(node, mat, tex){
 
     var material = mat;
+    var texture = tex;
+
     if(node.materialID != "null")
         material = this.materials[node.materialID];
+
+    if(node.textureID != "null")
+        texture = this.textures[node.textureID];
 
     this.scene.pushMatrix();
     this.scene.multMatrix(node.transformMatrix);
 
     for(var i = 0; i < node.children.length; i++){
-        this.drawEverything(this.nodes[node.children[i]], material);
+        this.drawEverything(this.nodes[node.children[i]], material, texture);
     }
 
     for(var j = 0; j < node.leaves.length; j++){
+        
+        if(texture != null)
+            material.setTexture(texture[0]);        
+
         material.apply();
+
         node.leaves[j].display();
     }
 
