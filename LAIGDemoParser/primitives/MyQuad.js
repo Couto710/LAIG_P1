@@ -37,8 +37,8 @@ MyQuad.prototype.initBuffers = function () {
     
     this.baseTexCoords = [
         0, 0,
-        0, Math.abs(this.args[1]-this.args[3]),
         Math.abs(this.args[2]-this.args[0]), 0,
+        0, Math.abs(this.args[1]-this.args[3]),
         Math.abs(this.args[2]-this.args[0]), Math.abs(this.args[1]-this.args[3])
     ];
 
