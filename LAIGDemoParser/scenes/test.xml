@@ -72,6 +72,11 @@
             <file path="images/ball.png" />                
             <amplif_factor s="1" t="1" />                           
         </TEXTURE>
+
+        <TEXTURE id="net">
+            <file path="images/net.jpg" />                
+            <amplif_factor s="1" t="1" />                           
+        </TEXTURE>
        
     </TEXTURES>
 
@@ -494,7 +499,7 @@
 
         <NODE id="net">
             <MATERIAL id="netMaterial" />     
-            <TEXTURE id ="null" />  
+            <TEXTURE id ="net" />  
 
             <TRANSLATION x="1" y="2.25" z="0" />
             <ROTATION axis="x" angle="-90" /> 

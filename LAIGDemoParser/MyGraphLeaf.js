@@ -20,7 +20,7 @@ function MyGraphLeaf(graph, xmlelem, args, id) {
 		break;
 
 		case "cylinder":
-		this.primitive = new MyCylinder(this.graph.scene, args);
+		this.primitive = new MyFullCylinder(this.graph.scene, args);
 		break;
 
 		case "sphere":

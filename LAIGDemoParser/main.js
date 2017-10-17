@@ -15,6 +15,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js',
 			 'MyGraphNode.js', 'MyGraphLeaf.js', 'MyInterface.js',
              './primitives/MyQuad.js', './primitives/MySphere.js',
              './primitives/MyCylinder.js', './primitives/MyTriangle.js',
+             './primitives/MyFullCylinder.js', './primitives/MyCircle.js',
 
 main=function()
 {
