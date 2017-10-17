@@ -30,6 +30,10 @@ function MyGraphLeaf(graph, xmlelem, args, id) {
 		case "triangle":
 		this.primitive = new MyTriangle(this.graph.scene, args);
 		break;
+
+		case "patch":
+		this.primitive = new MyPatch(this.graph.scene, args);
+		break;
 	}
 }
 
