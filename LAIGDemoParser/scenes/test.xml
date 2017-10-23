@@ -77,6 +77,11 @@
             <file path="images/net.jpg" />                
             <amplif_factor s="1" t="1" />                           
         </TEXTURE>
+
+        <TEXTURE id="teamcroc">
+            <file path="images/croc.jpg" />                
+            <amplif_factor s="1" t="1" />                           
+        </TEXTURE>
        
     </TEXTURES>
 
@@ -151,6 +156,15 @@
             <specular r="0.6" g="0.6" b="0.6" a="1" />        
             <diffuse r="0.3" g="0.3" b="0.3" a="1" />       
             <ambient r="0.0" g="0.0" b="0.0" a="1" />         
+            <emission r="0.0" g="0.0" b="0.0" a="1" />        
+        </MATERIAL>
+
+        <!-- Triangle Material-->
+        <MATERIAL id="triangleMaterial">                                  
+            <shininess value="70" />
+            <specular r="0.63" g="0.73" b="0.63" a="0.55" />        
+            <diffuse r="0.076" g="0.61" b="0.076" a="0.55" />       
+            <ambient r="0.02" g="0.17" b="0.02" a="0.55" />         
             <emission r="0.0" g="0.0" b="0.0" a="1" />        
         </MATERIAL>
 
@@ -701,8 +715,8 @@
         </NODE>
 
         <NODE id="ladosBancada">      
-            <MATERIAL id="defaultMaterial" />     
-            <TEXTURE id ="null" />
+            <MATERIAL id="triangleMaterial" />     
+            <TEXTURE id ="teamcroc" />
 
             <DESCENDANTS>
                 <NODEREF id="ladoBancada1" />
@@ -716,12 +730,12 @@
             <MATERIAL id="null" />      
             <TEXTURE id="null" />                   
 
-            <TRANSLATION x="29.5" y="0" z="22.5" />
-            <ROTATION axis="x" angle="190" />
+            <TRANSLATION x="29.4" y="0" z="22.5" />
+            <ROTATION axis="x" angle="180" />
             <ROTATION axis="z" angle="-90" />
             <SCALE sx="0.3" sy="0.3" sz="0.3" />
             <DESCENDANTS>
-                <LEAF id="triangle1" type="triangle" args="-2 0 10 10 0 2 0 0 0" />
+                <LEAF id="triangle1" type="triangle" args="0 0 10 10 0 0 0 0 0" />
             </DESCENDANTS>
 
         </NODE>
@@ -730,14 +744,14 @@
             <MATERIAL id="null" />      
             <TEXTURE id="null" />                   
 
-            <TRANSLATION x="29.5" y="0" z="-3.5" />
-            <ROTATION axis="x" angle="190" />
+            <TRANSLATION x="29.4" y="0" z="-3.5" />
+            <ROTATION axis="x" angle="180" />
             <ROTATION axis="z" angle="-90" />
             <ROTATION axis="y" angle="90" />
 
             <SCALE sx="0.3" sy="0." sz="0.3" />
             <DESCENDANTS>
-                <LEAF id="triangle1" type="triangle" args="-2 0 10 10 0 2 0 0 0" />
+                <LEAF id="triangle1" type="triangle" args="0 0 10 10 0 0 0 0 0" />
             </DESCENDANTS>
 
         </NODE>
@@ -746,13 +760,13 @@
             <MATERIAL id="null" />      
             <TEXTURE id="null" />                   
 
-            <TRANSLATION x="3" y="0" z="-3.5" />
+            <TRANSLATION x="3.1" y="0" z="-3.5" />
             <ROTATION axis="z" angle="90" />
-            <ROTATION axis="y" angle="14" />
+    
 
             <SCALE sx="0.3" sy="0.1" sz="0.3" />
             <DESCENDANTS>
-                <LEAF id="triangle1" type="triangle" args="-2 0 10 10 0 2 0 0 0" />
+                <LEAF id="triangle1" type="triangle" args="0 0 10 10 0 0 0 0 0" />
             </DESCENDANTS>
 
         </NODE>
@@ -762,14 +776,14 @@
             <MATERIAL id="null" />      
             <TEXTURE id="null" />                   
 
-            <TRANSLATION x="3" y="0" z="22.5" />
+            <TRANSLATION x="3.1" y="0" z="22.5" />
             <ROTATION axis="z" angle="90" />
-            <ROTATION axis="y" angle="102" />
+            <ROTATION axis="y" angle="90" />
 
 
             <SCALE sx="0.3" sy="0.1" sz="0.3" />
             <DESCENDANTS>
-                <LEAF id="triangle1" type="triangle" args="-2 0 10 10 0 2 0 0 0" />
+                <LEAF id="triangle1" type="triangle" args="0 0 10 10 0 0 0 0 0" />
             </DESCENDANTS>
 
         </NODE>

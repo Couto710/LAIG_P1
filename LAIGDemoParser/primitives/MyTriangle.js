@@ -46,9 +46,9 @@ MyTriangle.prototype.initBuffers = function() {
     var C = [Math.cos(ang) * vec3.len(AC), Math.sin(ang) * vec3.len(AC)];
 
     this.baseTexCoords = [
+        2, 0,
         0, 0,
-        vec3.length(AB), 0,
-        C[0], C[1]
+        0, 1.2
     ];
 
     this.texCoords = this.baseTexCoords.slice();
@@ -57,11 +57,11 @@ MyTriangle.prototype.initBuffers = function() {
     this.initGLBuffers();
 };
 
-MyTriangle.prototype.updateTex = function(S, T) {
+/*MyTriangle.prototype.updateTex = function(S, T) {
     for (var i = 0; i < this.texCoords.length; i+=2) {
         this.texCoords[i] = this.baseTexCoords[i]/S;
         this.texCoords[i+1] = this.baseTexCoords[i+1]/T;
     }
 
     this.updateTexCoordsGLBuffers();
-};
+};*/
