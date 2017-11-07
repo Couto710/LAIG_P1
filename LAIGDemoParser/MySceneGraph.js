@@ -1159,6 +1159,9 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
     console.log("Parsed materials");
 }
 
+MySceneGraph.prototype.parseAnimation = function(animationNode){
+	
+}
 
 /**
  * Parses the <NODES> block.
