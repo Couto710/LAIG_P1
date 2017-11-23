@@ -2,16 +2,14 @@
 * CircularAnimation
 * @constructor
 */
-function CircularAnimation(scene) extends Animation{
-	CGFobject.call(this,scene);
-
-};
-
-CircularAnimation.prototype = Object.create(CGFobject.prototype);
-CircularAnimation.prototype.constructor = CircularAnimation;
-
-
-CircularAnimation.prototype.display = function() {
-
-	
+class CircularAnimation extends Animation{
+	constructor(scene, id, speed, center, radius, startang, rotang){
+		super(scene, id);
+		this.speed = speed;
+		this.center = center;
+		this.radius = radius;
+		this.startang = startang;
+		this.rotang = rotang;
+	}
 }
+

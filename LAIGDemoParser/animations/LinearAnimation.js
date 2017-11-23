@@ -2,19 +2,13 @@
 * LinearAnimation
 * @constructor
 */
-function LinearAnimation(scene, object, controlPoints, velocity) extends Animation{
-	super(scene, object);
-	CGFobject.call(this, scene);
+class LinearAnimation extends Animation{
+	constructor(scene, id, speed, controlPoints){
 
-	this.controlPoints = controlPoints;
-	this.velocity = velocity;
-};
-
-LinearAnimation.prototype = Object.create(CGFobject.prototype);
-LinearAnimation.prototype.constructor = LinearAnimation;
-
-
-LinearAnimation.prototype.display = function() {
-
-	
+		super(scene, id);
+		this.controlPoints = controlPoints;
+		this.speed = speed;
+	}
 }
+
+

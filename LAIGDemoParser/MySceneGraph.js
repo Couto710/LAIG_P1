@@ -6,14 +6,15 @@ var ILLUMINATION_INDEX = 1;
 var LIGHTS_INDEX = 2;
 var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
-var LEAVES_INDEX = 5;
-var NODES_INDEX = 6;
+var ANIMATIONS_INDEX = 5;
+var LEAVES_INDEX = 6;
+var NODES_INDEX = 7;
 
 /**
  * MySceneGraph class, representing the scene graph.
  * @constructor
  */
-function MySceneGraph(filename, scene) {
+ function MySceneGraph(filename, scene) {
     this.loadedOk = null ;
     
     // Establish bidirectional references between scene and graph.
@@ -38,15 +39,15 @@ function MySceneGraph(filename, scene) {
 	 * After the file is read, the reader calls onXMLReady on this object.
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
-    
-    this.reader.open('scenes/' + filename, this);
-}
+
+     this.reader.open('scenes/' + filename, this);
+ }
 
 /*
  * Callback to be executed after successful reading
  */
-MySceneGraph.prototype.onXMLReady = function() 
-{
+ MySceneGraph.prototype.onXMLReady = function() 
+ {
     console.log("XML Loading finished.");
     var rootElement = this.reader.xmlDoc.documentElement;
     
@@ -67,7 +68,7 @@ MySceneGraph.prototype.onXMLReady = function()
 /**
  * Parses the LSX file, processing each block.
  */
-MySceneGraph.prototype.parseLSXFile = function(rootElement) {
+ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     if (rootElement.nodeName != "SCENE")
         return "root tag <SCENE> missing";
     
@@ -139,6 +140,17 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
         if ((error = this.parseMaterials(nodes[index])) != null )
             return error;
     }
+
+    // <ANIMATIONS>
+    if ((index = nodeNames.indexOf("ANIMATIONS")) == -1)
+        return "tag <ANIMATIONS> missing";
+    else {
+        if (index != ANIMATIONS_INDEX)
+            this.onXMLMinorError("tag <ANIMATIONS> out of order");
+        
+        if ((error = this.parseAnimations(nodes[index])) != null )
+            return error;
+    }
     
     // <NODES>
     if ((index = nodeNames.indexOf("NODES")) == -1)
@@ -156,8 +168,8 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
 /**
  * Parses the <INITIALS> block.
  */
-MySceneGraph.prototype.parseInitials = function(initialsNode) {
-    
+ MySceneGraph.prototype.parseInitials = function(initialsNode) {
+
     var children = initialsNode.children;
     
     var nodeNames = [];
@@ -400,7 +412,7 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         }
         else
             this.onXMLMinorError("unable to parse reference length; assuming 'length = 1'");
-    
+
     }
     
     console.log("Parsed initials");
@@ -411,8 +423,8 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
 /**
  * Parses the <ILLUMINATION> block.
  */
-MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
-    
+ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
+
     // Reads the ambient and background values.
     var children = illuminationNode.children;
     var nodeNames = [];
@@ -537,7 +549,7 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
     else
         this.onXMLMinorError("background clear colour undefined; assuming (R, G, B, A) = (0, 0, 0, 1)");
     
-   console.log("Parsed illumination");
+    console.log("Parsed illumination");
     
     return null ;
 }
@@ -545,8 +557,8 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
 /**
  * Parses the <LIGHTS> node.
  */
-MySceneGraph.prototype.parseLights = function(lightsNode) {
-    
+ MySceneGraph.prototype.parseLights = function(lightsNode) {
+
     var children = lightsNode.children;
     
     this.lights = [];
@@ -557,7 +569,7 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
     
     // Any number of lights.
     for (var i = 0; i < children.length; i++) {
-        
+
         if (children[i].nodeName != "LIGHT") {
             this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
             continue;
@@ -849,8 +861,8 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
 /**
  * Parses the <TEXTURES> block.
  */
-MySceneGraph.prototype.parseTextures = function(texturesNode) {
-    
+ MySceneGraph.prototype.parseTextures = function(texturesNode) {
+
     this.textures = [];
     
     var eachTexture = texturesNode.children;
@@ -929,8 +941,8 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
 /**
  * Parses the <MATERIALS> node.
  */
-MySceneGraph.prototype.parseMaterials = function(materialsNode) {
-    
+ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
+
     var children = materialsNode.children;
     // Each material.
     
@@ -988,12 +1000,12 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
         // G.
         var g = this.reader.getFloat(materialSpecs[specularIndex], 'g');
         if (g == null )
-           return "unable to parse G component of specular reflection for material with ID = " + materialID;
-        else if (isNaN(g))
-           return "specular 'g' is a non numeric value on the MATERIALS block";
-        else if (g < 0 || g > 1)
-           return "specular 'g' must be a value between 0 and 1 on the MATERIALS block";
-        specularComponent.push(g);
+         return "unable to parse G component of specular reflection for material with ID = " + materialID;
+     else if (isNaN(g))
+         return "specular 'g' is a non numeric value on the MATERIALS block";
+     else if (g < 0 || g > 1)
+         return "specular 'g' must be a value between 0 and 1 on the MATERIALS block";
+     specularComponent.push(g);
         // B.
         var b = this.reader.getFloat(materialSpecs[specularIndex], 'b');
         if (b == null )
@@ -1081,12 +1093,12 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
         // B.
         b = this.reader.getFloat(materialSpecs[ambientIndex], 'b');
         if (b == null )
-             return "unable to parse B component of ambient reflection for material with ID = " + materialID;
-        else if (isNaN(b))
-             return "ambient 'b' is a non numeric value on the MATERIALS block";
-        else if (b < 0 || b > 1)
-             return "ambient 'b' must be a value between 0 and 1 on the MATERIALS block";
-        ambientComponent.push(b);
+           return "unable to parse B component of ambient reflection for material with ID = " + materialID;
+       else if (isNaN(b))
+           return "ambient 'b' is a non numeric value on the MATERIALS block";
+       else if (b < 0 || b > 1)
+           return "ambient 'b' must be a value between 0 and 1 on the MATERIALS block";
+       ambientComponent.push(b);
         // A.
         a = this.reader.getFloat(materialSpecs[ambientIndex], 'a');
         if (a == null )
@@ -1159,15 +1171,202 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
     console.log("Parsed materials");
 }
 
-MySceneGraph.prototype.parseAnimation = function(animationNode){
-	
+/**
+ * Parses the <ANIMATIONS> block
+ */
+ MySceneGraph.prototype.parseAnimations = function(animationsNode){
+
+    this.animations = [];
+    var children = animationsNode.children;
+
+    for(var i = 0; i < children.length; i++){
+        //gets animation block
+        if (children[i].nodeName != "ANIMATION") {
+            this.onXMLMinorError("unknown tag name <" + children[i].nodeName + ">");
+            continue;
+        }
+        //gets id
+        var animationID = this.reader.getString(children[i], 'id');
+        if (animationID == null )
+            return "no ID defined for animation";
+        
+        if (this.animations[animationID] != null )
+            return "ID must be unique for each material (conflict: ID = " + materialID + ")";
+
+
+        //gets type
+        var possibleTypes = ["linear", "circular", "bezier", "combo"];
+        var animationType = this.reader.getString(children[i], 'type');
+        if (animationType == null )
+            return "no type defined for animation";
+        
+        if (possibleTypes.indexOf(animationType) == -1)
+            this.onXMLMinorError("unknown animation type <" + animationType + ">");
+
+        //parses linear animation
+        if (animationType = "linear"){
+
+            //gets speed
+            var animationSpeed = this.reader.getFloat(children[i], 'speed');
+            if (animationSpeed == null )
+                return "no speed defined for linear animation";    
+
+            //gets control point
+            var linearSpecs = children[i].children;
+            var linearCP = [];
+
+            for(var j = 0; j < linearSpecs.length; j++){
+
+                var specName = linearSpecs[j].nodeName;
+                if (specName != "controlpoint")
+                    this.onXMLMinorError("unknown linear spec. expected controlpoint, got " + specName);
+
+                var x = this.reader.getFloat(linearSpecs[j], 'xx');
+                if (x == null || isNaN(x))
+                    return "control point x linear undefined or not a number";
+                var y = this.reader.getFloat(linearSpecs[j], 'yy');
+                if (y == null || isNaN(y))
+                    return "control point y linear undefined or not a number";
+                var z = this.reader.getFloat(linearSpecs[j], 'zz');
+                if (x == null || isNaN(x))
+                    return "control point y linear undefined or not a number";
+
+                var cPoint = [x, y, z];
+                linearCP.push(cPoint);
+            }
+
+            //creates and adds animation
+            var anim = new LinearAnimation(this, animationID, animationSpeed, linearCP);
+            this.animations[animationID] = anim;   
+        }
+
+        //parses circular animation
+        else if (animationType == "circular"){
+
+            //gets speed
+            var animationSpeed = this.reader.getFloat(children[i], 'speed');
+            if (animationSpeed == null )
+                return "no speed defined for circular animation";
+
+            //gets center
+            var centerX = this.reader.getFloat(children[i], 'centerx');
+            if (centerX == null || isNaN(centerX))
+                return "centerX undefined or not a number";
+            var centerY = this.reader.getFloat(children[i], 'centery');
+            if (centerY == null || isNaN(centerY))
+                return "centerY undefined or not a number";
+            var centerZ = this.reader.getFloat(children[i], 'centerz');
+            if (centerZ == null || isNaN(centerZ))
+                return "centerZ undefined or not a number";
+
+            var center = [centerX, centerY, centerZ];
+
+            //gets radius
+            var radius = this.reader.getFloat(children[i], 'radius');
+            if (radius == null || isNaN(radius))
+                return "radius undefined or not a number";
+
+            //gets start angle
+            var startang = this.reader.getFloat(children[i], 'startang');
+            if (startang == null || isNaN(startang))
+                return "start angle undefined or not a number";
+
+            //gets rotation angle
+            var rotang = this.reader.getFloat(children[i], 'rotang');
+            if (rotang == null || isNaN(rotang))
+                return "rotation angle undefined or not a number";
+
+            //creates and andds animation
+            var anim = new CircularAnimation(this, animationID, animationSpeed, center, radius, startang, rotang);
+            this.animations[animationID] = anim;
+
+        }
+
+        //parses bezier animation
+        else if (animationType == "bezier"){
+
+            //gets speed
+            var animationSpeed = this.reader.getFloat(children[i], 'speed');
+            if (animationSpeed == null )
+                return "no speed defined for bezier animation";
+
+            //gets control points
+            var bezSpecs = children[i].children;
+            var bezCP = [];
+            if (bezSpecs.length != 4)
+                return "bezier animation doesn't have 4 control points";
+
+            for (var j = 0; j < bezSpecs.length; j++) {
+
+                var specName = bezSpecs[j].nodeName;
+                if (specName != "controlpoint")
+                    this.onXMLMinorError("unknown bezier spec. expected controlpoint, got " + specName);
+
+                var x = this.reader.getFloat(bezSpecs[j], 'xx');
+                if (x == null || isNaN(x))
+                    return "control point x bezier undefined or not a number";
+                var y = this.reader.getFloat(bezSpecs[j], 'yy');
+                if (y == null || isNaN(y))
+                    return "control point y bezier undefined or not a number";
+                var z = this.reader.getFloat(bezSpecs[j], 'zz');
+                if (x == null || isNaN(x))
+                    return "control point y bezier undefined or not a number";
+
+                //creates and adds animation
+                var cPoint = [x, y, z];
+                bezCP.push(cPoint);
+
+            }
+
+            var anim = new BezierAnimation(this, animationID, animationSpeed, bezCP);
+            this.animations[animationID] = anim;
+        }
+
+        //parses combo animation
+        else if (animationType == "combo"){
+
+            //parses specs, referenced animations animations
+            var comboSpecs = children[i].children;
+            var comboAnimations = [];
+
+            if(comboSpecs.length < 1)
+                return "combo animation has no animations references";
+
+            for (var j = 0; j < comboSpecs.length; j++) {
+
+                var specName = comboSpecs[j].nodeName;
+                if (specName != "SPANREF")
+                    this.onXMLMinorError("unknown bezier spec. expected SPANREF, got " + specName);
+
+                var spanrefID = this.reader.getFloat(comboSpecs[j], 'id');
+                if (spanrefID == null)
+                    return "spanref id in combo undefined";
+                if (this.animations[spanrefID] == null)
+                    return "not a valid animation ref id in combo"
+
+                comboAnimations.push(spanrefID);
+            }
+
+            //creates and adds animation
+            var anim = new ComboAnimation(this, animationID, comboAnimations);
+            this.animations[animationID] = anim;
+        }
+
+
+
+
+        
+
+
+
+    }
 }
 
 /**
  * Parses the <NODES> block.
  */
-MySceneGraph.prototype.parseNodes = function(nodesNode) {
-    
+ MySceneGraph.prototype.parseNodes = function(nodesNode) {
+
     // Traverses nodes.
     var children = nodesNode.children;
     
@@ -1238,7 +1437,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             // Retrieves possible transformations.
             for (var j = 0; j < nodeSpecs.length; j++) {
                 switch (nodeSpecs[j].nodeName) {
-                case "TRANSLATION":
+                    case "TRANSLATION":
                     // Retrieves translation parameters.
                     var x = this.reader.getFloat(nodeSpecs[j], 'x');
                     if (x == null ) {
@@ -1266,7 +1465,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
                     mat4.translate(this.nodes[nodeID].transformMatrix, this.nodes[nodeID].transformMatrix, [x, y, z]);
                     break;
-                case "ROTATION":
+                    case "ROTATION":
                     // Retrieves rotation parameters.
                     var axis = this.reader.getItem(nodeSpecs[j], 'axis', ['x', 'y', 'z']);
                     if (axis == null ) {
@@ -1283,7 +1482,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
                     mat4.rotate(this.nodes[nodeID].transformMatrix, this.nodes[nodeID].transformMatrix, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
                     break;
-                case "SCALE":
+                    case "SCALE":
                     // Retrieves scale parameters.
                     var sx = this.reader.getFloat(nodeSpecs[j], 'sx');
                     if (sx == null ) {
@@ -1308,10 +1507,10 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     }
                     else if (isNaN(sz))
                         return "non-numeric value for z component of scaling (node ID = " + nodeID + ")";
-                        
+
                     mat4.scale(this.nodes[nodeID].transformMatrix, this.nodes[nodeID].transformMatrix, [sx, sy, sz]);
                     break;
-                default:
+                    default:
                     break;
                 }
             }
@@ -1326,58 +1525,58 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             var sizeChildren = 0;
             for (var j = 0; j < descendants.length; j++) {
                 if (descendants[j].nodeName == "NODEREF")
-				{
-                    
-					var curId = this.reader.getString(descendants[j], 'id');
+                {
 
-					this.log("   Descendant: "+curId);
+                   var curId = this.reader.getString(descendants[j], 'id');
 
-                    if (curId == null )
-                        this.onXMLMinorError("unable to parse descendant id");
-                    else if (curId == nodeID)
-                        return "a node may not be a child of its own";
-                    else {
-                        this.nodes[nodeID].addChild(curId);
-                        sizeChildren++;
-                    }
-                }                    
+                   this.log("   Descendant: "+curId);
+
+                   if (curId == null )
+                    this.onXMLMinorError("unable to parse descendant id");
+                else if (curId == nodeID)
+                    return "a node may not be a child of its own";
+                else {
+                    this.nodes[nodeID].addChild(curId);
+                    sizeChildren++;
+                }
+            }                    
+            else
+               if (descendants[j].nodeName == "LEAF")
+               {
+                  var type=this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle','patch']);
+
+                  if (type != null)
+                     this.log("   Leaf: "+ type);
+                 else
+                     this.warn("Error in leaf");
+
+                 var id = this.reader.getString(descendants[j], "id");
+
+                 if(id == null){
+                    id = "noid";
+                    this.log("    leaf without id");
+                }
                 else
-					if (descendants[j].nodeName == "LEAF")
-					{
-						var type=this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle','patch']);
-						
-						if (type != null)
-							this.log("   Leaf: "+ type);
-						else
-							this.warn("Error in leaf");
+                    this.log("    Leaf id: " + id)
 
-                        var id = this.reader.getString(descendants[j], "id");
+                var args = this.reader.getString(descendants[j], 'args');
 
-                        if(id == null){
-                            id = "noid";
-                            this.log("    leaf without id");
-                        }
-                        else
-                            this.log("    Leaf id: " + id)
+                if(args != null)
+                    this.log("    Leaf args: " + args);
+                else
+                    this.warn("No args in leaf");
 
-                        var args = this.reader.getString(descendants[j], 'args');
-
-                        if(args != null)
-                            this.log("    Leaf args: " + args);
-                        else
-                            this.warn("No args in leaf");
-						
 						//parse leaf
                         var leaf = new MyGraphLeaf(this, type, args, id);
                         this.leaves.push(leaf);
                         this.nodes[nodeID].addLeaf(leaf);
                         sizeChildren++;
-					}
-					else
-						this.onXMLMinorError("unknown tag <" + descendants[j].nodeName + ">");
+                    }
+                    else
+                      this.onXMLMinorError("unknown tag <" + descendants[j].nodeName + ">");
 
-            }
-            if (sizeChildren == 0)
+              }
+              if (sizeChildren == 0)
                 return "at least one descendant must be defined for each intermediate node";
         } 
         else
@@ -1391,7 +1590,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 /*
  * Callback to be executed on any read error
  */
-MySceneGraph.prototype.onXMLError = function(message) {
+ MySceneGraph.prototype.onXMLError = function(message) {
     console.error("XML Loading Error: " + message);
     this.loadedOk = false;
 }
@@ -1399,7 +1598,7 @@ MySceneGraph.prototype.onXMLError = function(message) {
 /**
  * Callback to be executed on any minor error, showing a warning on the console.
  */
-MySceneGraph.prototype.onXMLMinorError = function(message) {
+ MySceneGraph.prototype.onXMLMinorError = function(message) {
     console.warn("Warning: " + message);
 }
 
@@ -1411,7 +1610,7 @@ MySceneGraph.prototype.log = function(message) {
  * Generates a default material, with a random name. This material will be passed onto the root node, which
  * may override it.
  */
-MySceneGraph.prototype.generateDefaultMaterial = function() {
+ MySceneGraph.prototype.generateDefaultMaterial = function() {
     var materialDefault = new CGFappearance(this.scene);
     materialDefault.setShininess(1);
     materialDefault.setSpecular(0, 0, 0, 1);
@@ -1430,7 +1629,7 @@ MySceneGraph.prototype.generateDefaultMaterial = function() {
 /**
  * Generates a random string of the specified length.
  */
-MySceneGraph.generateRandomString = function(length) {
+ MySceneGraph.generateRandomString = function(length) {
     // Generates an array of random integer ASCII codes of the specified length
     // and returns a string of the specified length.
     var numbers = [];
@@ -1443,7 +1642,7 @@ MySceneGraph.generateRandomString = function(length) {
 /**
  * Displays the scene, processing each node, starting in the root node.
  */
-MySceneGraph.prototype.displayScene = function() {
+ MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
 
     var rootn = this.nodes[this.idRoot];
@@ -1470,7 +1669,7 @@ MySceneGraph.prototype.drawEverything = function(node, mat, tex){
     }
 
     for(var j = 0; j < node.leaves.length; j++){
-        
+
         if(texture != null)
             material.setTexture(texture[0]);        
 
