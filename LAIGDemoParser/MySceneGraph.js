@@ -40,8 +40,8 @@ var NODES_INDEX = 7;
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
 
-     this.reader.open('scenes/' + filename, this);
- }
+    this.reader.open('scenes/' + filename, this);
+}
 
 /*
  * Callback to be executed after successful reading
@@ -1000,12 +1000,12 @@ var NODES_INDEX = 7;
         // G.
         var g = this.reader.getFloat(materialSpecs[specularIndex], 'g');
         if (g == null )
-         return "unable to parse G component of specular reflection for material with ID = " + materialID;
-     else if (isNaN(g))
-         return "specular 'g' is a non numeric value on the MATERIALS block";
-     else if (g < 0 || g > 1)
-         return "specular 'g' must be a value between 0 and 1 on the MATERIALS block";
-     specularComponent.push(g);
+           return "unable to parse G component of specular reflection for material with ID = " + materialID;
+       else if (isNaN(g))
+           return "specular 'g' is a non numeric value on the MATERIALS block";
+       else if (g < 0 || g > 1)
+           return "specular 'g' must be a value between 0 and 1 on the MATERIALS block";
+       specularComponent.push(g);
         // B.
         var b = this.reader.getFloat(materialSpecs[specularIndex], 'b');
         if (b == null )
@@ -1093,12 +1093,12 @@ var NODES_INDEX = 7;
         // B.
         b = this.reader.getFloat(materialSpecs[ambientIndex], 'b');
         if (b == null )
-           return "unable to parse B component of ambient reflection for material with ID = " + materialID;
-       else if (isNaN(b))
-           return "ambient 'b' is a non numeric value on the MATERIALS block";
-       else if (b < 0 || b > 1)
-           return "ambient 'b' must be a value between 0 and 1 on the MATERIALS block";
-       ambientComponent.push(b);
+         return "unable to parse B component of ambient reflection for material with ID = " + materialID;
+     else if (isNaN(b))
+         return "ambient 'b' is a non numeric value on the MATERIALS block";
+     else if (b < 0 || b > 1)
+         return "ambient 'b' must be a value between 0 and 1 on the MATERIALS block";
+     ambientComponent.push(b);
         // A.
         a = this.reader.getFloat(materialSpecs[ambientIndex], 'a');
         if (a == null )
@@ -1191,8 +1191,7 @@ var NODES_INDEX = 7;
             return "no ID defined for animation";
         
         if (this.animations[animationID] != null )
-            return "ID must be unique for each material (conflict: ID = " + materialID + ")";
-
+            return "ID must be unique for each animation (conflict: ID = " + materialID + ")";
 
         //gets type
         var possibleTypes = ["linear", "circular", "bezier", "combo"];
@@ -1204,7 +1203,7 @@ var NODES_INDEX = 7;
             this.onXMLMinorError("unknown animation type <" + animationType + ">");
 
         //parses linear animation
-        if (animationType = "linear"){
+        if (animationType == "linear"){
 
             //gets speed
             var animationSpeed = this.reader.getFloat(children[i], 'speed');
@@ -1312,12 +1311,11 @@ var NODES_INDEX = 7;
                 if (x == null || isNaN(x))
                     return "control point y bezier undefined or not a number";
 
-                //creates and adds animation
                 var cPoint = [x, y, z];
                 bezCP.push(cPoint);
-
             }
 
+             //creates and adds animation
             var anim = new BezierAnimation(this, animationID, animationSpeed, bezCP);
             this.animations[animationID] = anim;
         }
@@ -1338,7 +1336,7 @@ var NODES_INDEX = 7;
                 if (specName != "SPANREF")
                     this.onXMLMinorError("unknown bezier spec. expected SPANREF, got " + specName);
 
-                var spanrefID = this.reader.getFloat(comboSpecs[j], 'id');
+                var spanrefID = this.reader.getString(comboSpecs[j], 'id');
                 if (spanrefID == null)
                     return "spanref id in combo undefined";
                 if (this.animations[spanrefID] == null)
@@ -1351,15 +1349,10 @@ var NODES_INDEX = 7;
             var anim = new ComboAnimation(this, animationID, comboAnimations);
             this.animations[animationID] = anim;
         }
-
-
-
-
-        
-
-
-
+        console.log(this.animations[animationID]);
     }
+
+    console.log("Parsed Animations");
 }
 
 /**
@@ -1400,7 +1393,7 @@ var NODES_INDEX = 7;
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
             var specsNames = [];
-            var possibleValues = ["MATERIAL", "TEXTURE", "TRANSLATION", "ROTATION", "SCALE", "DESCENDANTS"];
+            var possibleValues = ["MATERIAL", "TEXTURE", "TRANSLATION", "ROTATION", "SCALE", "DESCENDANTS", "ANIMATIONREFS"];
             for (var j = 0; j < nodeSpecs.length; j++) {
                 var name = nodeSpecs[j].nodeName;
                 specsNames.push(nodeSpecs[j].nodeName);
@@ -1514,6 +1507,36 @@ var NODES_INDEX = 7;
                     break;
                 }
             }
+
+            //Retrive information about animations, if any
+            var animationsIndex = specsNames.indexOf("ANIMATIONREFS");
+
+            //checks if there is the ANIMATIONREFS block
+            if (animationsIndex != -1){
+                var animations =  nodeSpecs[animationsIndex].children;
+
+                //gets all the animation references
+                var anis = [];
+                for (var k = 0; k < animations.length; k++){
+
+                    if(animations[k].nodeName == "ANIMATIONREF"){
+
+                        var aniID = this.reader.getString(animations[k], 'id');
+                        if(aniID == null)
+                            this.onXMLMinorError("unable to parse animationref id");
+                        else if (this.animations[aniID] == null)
+                            this.onXMLMinorError("animation referenced not defined");
+
+                        anis.push(aniID);
+                    }
+                    else
+                        this.onXMLMinorError("was expecting ANIMATIONREF, found " + animations[k].nodename);
+                }
+
+                //adds animations to the node
+                this.nodes[nodeID].animations = anis;
+            }
+
             
             // Retrieves information about children.
             var descendantsIndex = specsNames.indexOf("DESCENDANTS");
@@ -1527,11 +1550,11 @@ var NODES_INDEX = 7;
                 if (descendants[j].nodeName == "NODEREF")
                 {
 
-                   var curId = this.reader.getString(descendants[j], 'id');
+                 var curId = this.reader.getString(descendants[j], 'id');
 
-                   this.log("   Descendant: "+curId);
+                 this.log("   Descendant: "+curId);
 
-                   if (curId == null )
+                 if (curId == null )
                     this.onXMLMinorError("unable to parse descendant id");
                 else if (curId == nodeID)
                     return "a node may not be a child of its own";
@@ -1541,30 +1564,30 @@ var NODES_INDEX = 7;
                 }
             }                    
             else
-               if (descendants[j].nodeName == "LEAF")
-               {
-                  var type=this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle','patch']);
+             if (descendants[j].nodeName == "LEAF")
+             {
+              var type=this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle','patch']);
 
-                  if (type != null)
-                     this.log("   Leaf: "+ type);
-                 else
-                     this.warn("Error in leaf");
+              if (type != null)
+               this.log("   Leaf: "+ type);
+           else
+               this.warn("Error in leaf");
 
-                 var id = this.reader.getString(descendants[j], "id");
+           var id = this.reader.getString(descendants[j], "id");
 
-                 if(id == null){
-                    id = "noid";
-                    this.log("    leaf without id");
-                }
-                else
-                    this.log("    Leaf id: " + id)
+           if(id == null){
+            id = "noid";
+            this.log("    leaf without id");
+        }
+        else
+            this.log("    Leaf id: " + id)
 
-                var args = this.reader.getString(descendants[j], 'args');
+        var args = this.reader.getString(descendants[j], 'args');
 
-                if(args != null)
-                    this.log("    Leaf args: " + args);
-                else
-                    this.warn("No args in leaf");
+        if(args != null)
+            this.log("    Leaf args: " + args);
+        else
+            this.warn("No args in leaf");
 
 						//parse leaf
                         var leaf = new MyGraphLeaf(this, type, args, id);
