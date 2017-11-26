@@ -260,7 +260,9 @@
             <TRANSLATION x="2" y="0" z="9.5" />
 
             <ANIMATIONREFS>
-                <ANIMATIONREF id="circ1" />
+                <ANIMATIONREF id="lin1" />
+                <ANIMATIONREF id="lin1" />
+
             </ANIMATIONREFS>
 
             <DESCENDANTS>
