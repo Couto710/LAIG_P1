@@ -32,9 +32,9 @@ class LinearAnimation extends Animation{
 			var vely = (this.controlPoints[i+1][1] - this.controlPoints[i][1]) / sptime;
 			var velz = (this.controlPoints[i+1][2] - this.controlPoints[i][2]) / sptime;
 
-			var angle = Math.acos((this.controlPoints[i+1][0] - this.controlPoints[i][0]) / distance);
+			//var angle = Math.acos((this.controlPoints[i+1][0] - this.controlPoints[i][0]) / distance);
 
-			this.sectionStats.push([velx, vely, velz, angle]);
+			this.sectionStats.push([velx, vely, velz]);
 		}
 
 		this.span = this.totaldistance / this.speed;
@@ -64,7 +64,7 @@ class LinearAnimation extends Animation{
 			mat4.identity(this.matrix);
 			mat4.translate(this.matrix, this.matrix, [x, y, z]);
 			mat4.translate(this.matrix, this.matrix, [this.controlPoints[section][0], this.controlPoints[section][1], this.controlPoints[section][2]]);
-			mat4.rotate(this.matrix, this.matrix, Math.atan2(this.controlPoints[section+1][0] - this.controlPoints[section][0], this.controlPoints[section+1][2] - this.controlPoints[section][2]) - Math.PI/2, [0,1,0]);
+			mat4.rotate(this.matrix, this.matrix, Math.atan2(this.controlPoints[section+1][0] - this.controlPoints[section][0], this.controlPoints[section+1][2] - this.controlPoints[section][2]), [0,1,0]); //  - Math.PI/2 , front of basket
 		}
 		return this.matrix;
 	}
