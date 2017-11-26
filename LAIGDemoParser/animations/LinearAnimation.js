@@ -26,10 +26,11 @@ class LinearAnimation extends Animation{
 			var stime = this.totaldistance / this.speed;
 			this.sectionTimes.push(stime);
 
+			var sptime = distance / this.speed;
 			//partial speeds
-			var velx = (this.controlPoints[i+1][0] - this.controlPoints[i][0]) / stime;
-			var vely = (this.controlPoints[i+1][1] - this.controlPoints[i][1]) / stime;
-			var velz = (this.controlPoints[i+1][2] - this.controlPoints[i][2]) / stime;
+			var velx = (this.controlPoints[i+1][0] - this.controlPoints[i][0]) / sptime;
+			var vely = (this.controlPoints[i+1][1] - this.controlPoints[i][1]) / sptime;
+			var velz = (this.controlPoints[i+1][2] - this.controlPoints[i][2]) / sptime;
 
 			var angle = Math.acos((this.controlPoints[i+1][0] - this.controlPoints[i][0]) / distance);
 
@@ -41,20 +42,28 @@ class LinearAnimation extends Animation{
 
 	calcMatrix(time, section){
 
-		console.log(time + "   " + section);
+		console.log("section     " + section);
+		console.log("tempos      " + this.sectionTimes);
+		console.log(this.sectionStats);
 
-		var time = time;
+		var ntime = time;
 		if (section > 0)
-			time -= this.sectionTimes[section];
+			ntime -= this.sectionTimes[section-1];
+
+
+		console.log("ntime          " + ntime);
 
 		if(section < this.controlPoints.length - 1){
 
-			var x = time * this.sectionStats[section][0];
-			var y = time * this.sectionStats[section][1];
-			var z = time * this.sectionStats[section][2];
+			var x = ntime * this.sectionStats[section][0];
+			var y = ntime * this.sectionStats[section][1];
+			var z = ntime * this.sectionStats[section][2];
+
+			console.log("desloca     " + [x, y, z]);
 
 			mat4.identity(this.matrix);
 			mat4.translate(this.matrix, this.matrix, [x, y, z]);
+			mat4.translate(this.matrix, this.matrix, [this.controlPoints[section][0], this.controlPoints[section][1], this.controlPoints[section][2]]);
 		}
 		return this.matrix;
 	}
