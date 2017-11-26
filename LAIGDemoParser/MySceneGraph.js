@@ -1528,6 +1528,7 @@ var NODES_INDEX = 7;
                             this.onXMLMinorError("animation referenced not defined");
 
                         anis.push(aniID);
+                        console.log(aniID);
                     }
                     else
                         this.onXMLMinorError("was expecting ANIMATIONREF, found " + animations[k].nodename);
@@ -1686,6 +1687,7 @@ MySceneGraph.prototype.drawEverything = function(node, mat, tex){
 
     this.scene.pushMatrix();
     this.scene.multMatrix(node.transformMatrix);
+    this.scene.multMatrix(node.animationMatrix);
 
     for(var i = 0; i < node.children.length; i++){
         this.drawEverything(this.nodes[node.children[i]], material, texture);

@@ -41,6 +41,8 @@ class LinearAnimation extends Animation{
 
 	calcMatrix(time, section){
 
+		console.log(time + "   " + section);
+
 		var time = time;
 		if (section > 0)
 			time -= this.sectionTimes[section];
@@ -54,7 +56,7 @@ class LinearAnimation extends Animation{
 			mat4.identity(this.matrix);
 			mat4.translate(this.matrix, this.matrix, [x, y, z]);
 		}
-
+		return this.matrix;
 	}
 }
 

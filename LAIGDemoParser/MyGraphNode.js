@@ -28,6 +28,7 @@ function MyGraphNode(graph, nodeID) {
 
     this.animationMatrix = mat4.create();
     mat4.identity(this.animationMatrix);
+    console.log(this.animationMatrix);
 
     this.atime = 0;
     this.aind = 0;
@@ -53,7 +54,11 @@ MyGraphNode.prototype.updateAnimation = function(timedif){
 
     this.atime += timedif;
 
+        console.log(this.animationMatrix + "   " + this.nodeID);
+
     if(this.aind < this.animations.length){
+
+        console.log(this.nodeID + "---------------------");
         
         var nowani = this.graph.animations[this.animations[this.aind]];
         this.animationMatrix = nowani.calcMatrix(this.atime, this.asec);
