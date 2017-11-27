@@ -3,10 +3,11 @@
 * @constructor
 */
 class Animation{
-	constructor(scene, id){
-		this.scene = scene;
+	constructor(graph, id, type){
+		this.graph = graph;
 		this.id = id;
 		this.span = 0;
+		this.type = type;
 	}
 
 	getSpan(){

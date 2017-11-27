@@ -1236,7 +1236,7 @@ var NODES_INDEX = 7;
             }
 
             //creates and adds animation
-            var anim = new LinearAnimation(this, animationID, animationSpeed, linearCP);
+            var anim = new LinearAnimation(this, animationID, animationSpeed, linearCP, animationType);
             this.animations[animationID] = anim;   
         }
 
@@ -1277,7 +1277,7 @@ var NODES_INDEX = 7;
                 return "rotation angle undefined or not a number";
 
             //creates and andds animation
-            var anim = new CircularAnimation(this, animationID, animationSpeed, center, radius, startang, rotang);
+            var anim = new CircularAnimation(this, animationID, animationSpeed, center, radius, startang, rotang, animationType);
             this.animations[animationID] = anim;
 
         }
@@ -1317,7 +1317,7 @@ var NODES_INDEX = 7;
             }
 
              //creates and adds animation
-            var anim = new BezierAnimation(this, animationID, animationSpeed, bezCP);
+            var anim = new BezierAnimation(this, animationID, animationSpeed, bezCP, animationType);
             this.animations[animationID] = anim;
         }
 
@@ -1347,7 +1347,7 @@ var NODES_INDEX = 7;
             }
 
             //creates and adds animation
-            var anim = new ComboAnimation(this, animationID, comboAnimations);
+            var anim = new ComboAnimation(this, animationID, comboAnimations, animationType);
             this.animations[animationID] = anim;
         }
         console.log(this.animations[animationID]);

@@ -3,9 +3,9 @@
 * @constructor
 */
 class LinearAnimation extends Animation{
-	constructor(scene, id, speed, controlPoints){
+	constructor(graph, id, speed, controlPoints, type){
 
-		super(scene, id);
+		super(graph, id, type);
 		this.controlPoints = controlPoints;
 		this.speed = speed;
 		this.matrix = mat4.create();

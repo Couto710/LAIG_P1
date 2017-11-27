@@ -3,14 +3,15 @@
 * @constructor
 */
 class CircularAnimation extends Animation{
-	constructor(scene, id, speed, center, radius, startang, rotang){
-		super(scene, id);
+	constructor(graph, id, speed, center, radius, startang, rotang, type){
+		super(graph, id, type);
 		this.speed = speed;
 		this.center = center;
 		this.radius = radius;
 		this.startang = startang;
 		this.rotang = rotang;
-		this.sectionTimes = []
+		this.sectionTimes = [];
+
 
 		this.matrix = mat4.create();
 
