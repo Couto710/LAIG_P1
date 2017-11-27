@@ -22,6 +22,7 @@ var NODES_INDEX = 7;
     scene.graph = this;
     
     this.nodes = [];
+    this.selectableNodes = ["None"];
     this.leaves = [];
     
     this.idRoot = null;                    // The id of the root element.
@@ -1385,10 +1386,21 @@ var NODES_INDEX = 7;
             if (this.nodes[nodeID] != null )
                 return "node ID must be unique (conflict: ID = " + nodeID + ")";
             
+            //flag shader
+            var shaderFlag = false;
+            if(this.reader.hasAttribute(children[i], 'selectable')){
+                var shaderFlag = this.reader.getString(children[i], 'selectable');
+            } 
+
             this.log("Processing node "+nodeID);
 
             // Creates node.
             this.nodes[nodeID] = new MyGraphNode(this,nodeID);
+              if (shaderFlag != false){
+                this.nodes[nodeID].selectable = shaderFlag;
+                this.selectableNodes.push(nodeID);
+            }
+
 
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
@@ -1689,8 +1701,18 @@ MySceneGraph.prototype.drawEverything = function(node, mat, tex){
     this.scene.multMatrix(node.transformMatrix);
     this.scene.multMatrix(node.animationMatrix);
 
+    // Set node active shader
+    if (this.scene.selectableNodes == node.nodeID) {
+        this.scene.setActiveShader(this.scene.shader);
+    }
+
+
     for(var i = 0; i < node.children.length; i++){
         this.drawEverything(this.nodes[node.children[i]], material, texture);
+    }
+
+     if (node.children.length != 0 && this.scene.selectableNodes == node.nodeID) {
+        this.scene.setActiveShader(this.scene.defaultShader);
     }
 
     for(var j = 0; j < node.leaves.length; j++){
@@ -1701,6 +1723,10 @@ MySceneGraph.prototype.drawEverything = function(node, mat, tex){
         material.apply();
 
         node.leaves[j].display();
+
+        if (node.children.length == 0 && this.scene.selectableNodes == node.nodeID)
+            this.scene.setActiveShader(this.scene.defaultShader);
+
     }
 
     this.scene.popMatrix();

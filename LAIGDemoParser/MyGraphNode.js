@@ -32,8 +32,10 @@ function MyGraphNode(graph, nodeID) {
     this.atime = 0;
     this.aind = 0;
     this.asec = 0;
-}
 
+    this.selectable = false;
+
+}
 /**
  * Adds the reference (ID) of another node to this node's children array.
  */

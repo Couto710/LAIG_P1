@@ -10,6 +10,12 @@ function XMLscene(interface) {
     this.interface = interface;
 
     this.lightValues = {};
+
+    var strDate = new Date();
+    this.sceneStrTime = strDate.getTime() * 0.001;
+
+    this.selectableNodes = "None";
+
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -20,6 +26,9 @@ XMLscene.prototype.constructor = XMLscene;
  */
 XMLscene.prototype.init = function(application) {
     CGFscene.prototype.init.call(this, application);
+
+    this.shader = new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag");
+    this.shader.setUniformsValues({red: 1.0, green: 0.0, blue: 1.0}); 
     
     this.initCameras();
 
@@ -35,6 +44,10 @@ XMLscene.prototype.init = function(application) {
     //setting update period
     this.setUpdatePeriod(10);
     this.time = 0;
+}
+
+XMLscene.prototype.updateFactorTime = function(date){
+    this.shader.setUniformsValues({timeFactor: date});
 }
 
 /**
@@ -96,6 +109,8 @@ XMLscene.prototype.onGraphLoaded = function()
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
+    // Adds shader group.
+    this.interface.addShaderNodes(this.graph.selectableNodes);
 }
 
 /**
@@ -140,6 +155,14 @@ XMLscene.prototype.display = function() {
                 i++;
             }
         }
+
+        var actualDate = new Date();
+        var actualDateTime = actualDate.getTime() * 0.001;
+        if(this.sceneStrTime == null){
+            this.sceneStrTime = actualDateTime;
+        }
+        var deltaTime = actualDateTime - this.sceneStrTime;
+        this.updateFactorTime(deltaTime);
 
         // Displays the scene.
         this.graph.displayScene();
