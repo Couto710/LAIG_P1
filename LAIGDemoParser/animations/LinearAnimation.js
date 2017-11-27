@@ -42,24 +42,15 @@ class LinearAnimation extends Animation{
 
 	calcMatrix(time, section){
 
-		console.log("section     " + section);
-		console.log("tempos      " + this.sectionTimes);
-		console.log(this.sectionStats);
-
 		var ntime = time;
 		if (section > 0)
 			ntime -= this.sectionTimes[section-1];
-
-
-		console.log("ntime          " + ntime);
 
 		if(section < this.controlPoints.length - 1){
 
 			var x = ntime * this.sectionStats[section][0];
 			var y = ntime * this.sectionStats[section][1];
 			var z = ntime * this.sectionStats[section][2];
-
-			console.log("desloca     " + [x, y, z]);
 
 			mat4.identity(this.matrix);
 			mat4.translate(this.matrix, this.matrix, [x, y, z]);

@@ -190,10 +190,10 @@
         </ANIMATION>
 
         <ANIMATION id="bez1" speed="2" type="bezier">
-            <controlpoint xx="1" yy="0" zz="0" />
-            <controlpoint xx="1" yy="0" zz="1" />
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0" zz="1" />
+            <controlpoint xx="5" yy="0" zz="0" />
+            <controlpoint xx="7" yy="0" zz="5" />
+            <controlpoint xx="3" yy="0" zz="3" />
         </ANIMATION>
 
         <ANIMATION id="circ1" speed="2" type="circular" centerx="0" centery="0" centerz="0" radius="2" startang="0" rotang="360" />
@@ -260,9 +260,7 @@
             <TRANSLATION x="2" y="0" z="9.5" />
 
             <ANIMATIONREFS>
-                <ANIMATIONREF id="lin1" />
-                <ANIMATIONREF id="lin1" />
-
+                <ANIMATIONREF id="bez1" />
             </ANIMATIONREFS>
 
             <DESCENDANTS>
