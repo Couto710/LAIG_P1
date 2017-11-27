@@ -49,8 +49,7 @@ class ComboAnimation extends Animation{
 		var mat = this.animations[section].calcMatrix(ntime, argsection);
 
 		mat4.identity(this.matrix);
-		mat4.add(this.matrix, mat, this.connectorMatrixes[section]);
+		mat4.multiply(this.matrix, mat, this.connectorMatrixes[section]);
 		return this.matrix;
-
 	}
 }
