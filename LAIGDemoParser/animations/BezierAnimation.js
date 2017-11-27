@@ -59,8 +59,6 @@ class BezierAnimation extends Animation{
 					this.p3[2] * 3 * invT * Math.pow(tratio, 2) + 
 					this.p4[2] * Math.pow(tratio, 3);
 
-			console.log([tratio, invT, this.p2[0]]);
-
 			mat4.identity(this.matrix);
 			mat4.translate(this.matrix, this.matrix, [x, y, z]);
 		}
